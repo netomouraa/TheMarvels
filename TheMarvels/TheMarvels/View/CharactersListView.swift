@@ -13,11 +13,13 @@ struct CharactersListView: View {
     var body: some View {
         NavigationView {
             List(viewModel.characters) { character in
-                NavigationLink(destination: CharacterDetailView(character: character)) {
-                    CharacterRowView(character: character)
-                }
+                NavigationLink(destination: CharacterDetailView(character: character)
+                    .environmentObject(viewModel)) {
+                        CharacterRowView(character: character)
+                    }
             }
             .navigationBarTitle("The Marvels")
+            .environmentObject(viewModel)
         }
         .onAppear {
             viewModel.fetchCharacters()

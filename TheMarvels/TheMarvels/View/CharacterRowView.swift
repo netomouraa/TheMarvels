@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct CharacterRowView: View {
+    @EnvironmentObject var viewModel: CharactersViewModel
     let character: Character
     
     var body: some View {
@@ -42,6 +43,21 @@ struct CharacterRowView: View {
                     .foregroundColor(.gray)
                     .lineLimit(2)
             }
+            
+            Spacer()
+            
+            Button(action: {
+                viewModel.toggleFavorite(character: character)
+            }) {
+                if let isFavorite = character.isFavorite {
+                    Image(systemName: isFavorite ? "star.fill" : "star")
+                        .foregroundColor(isFavorite ? .yellow : .gray)
+                } else {
+                    Image(systemName: "star")
+                        .foregroundColor(.gray)
+                }
+            }
+            .padding(.trailing)
         }
     }
 }

@@ -33,6 +33,7 @@ struct Character: Identifiable, Decodable {
     let stories: Collection
     let events: Collection
     let urls: [URLInfo]
+    var isFavorite: Bool?
 }
 
 struct Thumbnail: Decodable {

@@ -25,17 +25,10 @@ class CharactersViewModel: ObservableObject {
         }
     }
     
-
-    //    func fetchCharacters() {
-    //        marvelService.fetchCharacters { [weak self] result in
-    //            switch result {
-    //            case .success(let characters):
-    //                DispatchQueue.main.async {
-    //                    self?.characters = characters
-    //                }
-    //            case .failure(let error):
-    //                print("Erro ao buscar personagens: \(error)")
-    //            }
-    //        }
-    //    }
+    func toggleFavorite(character: Character) {
+         if let index = characters.firstIndex(where: { $0.id == character.id }) {
+             characters[index].isFavorite?.toggle()
+             UserDefaults.standard.set(characters[index].isFavorite, forKey: "favorite_\(character.id)")
+         }
+     }
 }

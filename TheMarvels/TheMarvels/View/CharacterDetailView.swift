@@ -8,11 +8,17 @@
 import SwiftUI
 
 struct CharacterDetailView: View {
-    let character: Character
+    @EnvironmentObject var charactersViewModel: CharactersViewModel
+    @ObservedObject var characterDetailViewModel: CharacterDetailViewModel
+    
+    init(character: Character) {
+        let characterDetailViewModel = CharacterDetailViewModel(character: character)
+        _characterDetailViewModel = ObservedObject(initialValue: characterDetailViewModel)
+    }
     
     var body: some View {
         VStack {
-            if let thumbnailURL = URL(string: "\(character.thumbnail.path).\(character.thumbnail.extension)") {
+            if let thumbnailURL = URL(string: "\(characterDetailViewModel.character.thumbnail.path).\(characterDetailViewModel.character.thumbnail.extension)") {
                 AsyncImage(url: thumbnailURL) { phase in
                     switch phase {
                     case .success(let image):
@@ -31,15 +37,28 @@ struct CharacterDetailView: View {
                     .frame(height: 200)
             }
             
-            Text(character.name)
+            Text(characterDetailViewModel.character.name)
                 .font(.title)
                 .padding()
             
-            Text(character.description)
+            Text(characterDetailViewModel.character.description)
                 .padding()
             
             Spacer()
         }
-//        .navigationBarTitle("Character Detail")
+        .navigationBarTitle("Character Detail")
+        .navigationBarItems(trailing:
+                                Button(action: {
+            characterDetailViewModel.toggleFavorite()
+        }) {
+            if let isFavorite = characterDetailViewModel.character.isFavorite {
+                Image(systemName: isFavorite ? "star.fill" : "star")
+                    .foregroundColor(isFavorite ? .yellow : .gray)
+            } else {
+                Image(systemName: "star")
+                    .foregroundColor(.gray)
+            }
+        }
+        )
     }
 }

@@ -23,6 +23,7 @@
 		97AE5F842BE0A3B6004FC9BF /* Thumbnail.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97AE5F832BE0A3B6004FC9BF /* Thumbnail.swift */; };
 		97AE5F862BE0A4A8004FC9BF /* CharactersListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97AE5F852BE0A4A8004FC9BF /* CharactersListView.swift */; };
 		97AE5F882BE0A523004FC9BF /* MarvelService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97AE5F872BE0A523004FC9BF /* MarvelService.swift */; };
+		97AE5F8C2BE0BF0B004FC9BF /* CharacterDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97AE5F8B2BE0BF0B004FC9BF /* CharacterDetailViewModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -63,6 +64,7 @@
 		97AE5F852BE0A4A8004FC9BF /* CharactersListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharactersListView.swift; sourceTree = "<group>"; };
 		97AE5F872BE0A523004FC9BF /* MarvelService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarvelService.swift; sourceTree = "<group>"; };
 		97AE5F8A2BE0AAD4004FC9BF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		97AE5F8B2BE0BF0B004FC9BF /* CharacterDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharacterDetailViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -175,6 +177,7 @@
 			isa = PBXGroup;
 			children = (
 				97AE5F7A2BE09883004FC9BF /* CharactersViewModel.swift */,
+				97AE5F8B2BE0BF0B004FC9BF /* CharacterDetailViewModel.swift */,
 				97AE5F872BE0A523004FC9BF /* MarvelService.swift */,
 			);
 			path = ViewModel;
@@ -319,6 +322,7 @@
 				97AE5F862BE0A4A8004FC9BF /* CharactersListView.swift in Sources */,
 				97AE5F792BE0987C004FC9BF /* CharacterDetailView.swift in Sources */,
 				97AE5F752BE09868004FC9BF /* Character.swift in Sources */,
+				97AE5F8C2BE0BF0B004FC9BF /* CharacterDetailViewModel.swift in Sources */,
 				97AE5F882BE0A523004FC9BF /* MarvelService.swift in Sources */,
 				97AE5F772BE09875004FC9BF /* CharacterRowView.swift in Sources */,
 			);
