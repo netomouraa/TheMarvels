@@ -9,6 +9,7 @@ import SwiftUI
 
 struct CharacterRowView: View {
     @EnvironmentObject var viewModel: CharactersViewModel
+    @EnvironmentObject var characterDetailViewModel: CharacterDetailViewModel
     let character: Character
     
     var body: some View {

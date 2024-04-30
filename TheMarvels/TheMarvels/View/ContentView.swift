@@ -10,7 +10,8 @@ import SwiftUI
 struct ContentView: View {
     @StateObject var viewModel = CharactersViewModel()
     @State private var showFavorites = false
-    
+    @State private var searchText = ""
+
     var body: some View {
         VStack {
             Picker(selection: $showFavorites, label: Text("Favorites")) {
@@ -19,7 +20,11 @@ struct ContentView: View {
             }
             .pickerStyle(SegmentedPickerStyle())
             .padding()
-            
+
+            TextField("Search", text: $searchText)
+                   .textFieldStyle(RoundedBorderTextFieldStyle())
+                   .padding(.horizontal)
+
             if showFavorites {
                 FavoritesListView(viewModel: viewModel)
             } else {
@@ -28,6 +33,7 @@ struct ContentView: View {
         }
         .onAppear {
             viewModel.fetchCharacters()
+            searchText = ""
         }
     }
 }

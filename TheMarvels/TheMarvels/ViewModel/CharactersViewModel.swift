@@ -13,7 +13,24 @@ class CharactersViewModel: ObservableObject {
     @Published var characters: [Character] = []
     private let marvelService: MarvelService
     @Published var favoriteCharacters: [Character] = [] 
+    @Published var searchText: String = ""
 
+    var filteredCharacters: [Character] {
+        if searchText.isEmpty {
+            return characters
+        } else {
+            return characters.filter { $0.name.lowercased().contains(searchText.lowercased()) }
+        }
+    }
+
+    var filteredFavoriteCharacters: [Character] {
+        if searchText.isEmpty {
+            return favoriteCharacters
+        } else {
+            return favoriteCharacters.filter { $0.name.lowercased().contains(searchText.lowercased()) }
+        }
+    }
+    
     init(marvelService: MarvelService = MarvelService()) {
         self.marvelService = marvelService
     }
