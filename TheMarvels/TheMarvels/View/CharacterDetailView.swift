@@ -10,6 +10,7 @@ import SwiftUI
 struct CharacterDetailView: View {
     @EnvironmentObject var charactersViewModel: CharactersViewModel
     @ObservedObject var characterDetailViewModel: CharacterDetailViewModel
+    @State private var sharedImage: UIImage?
     
     init(character: Character) {
         let characterDetailViewModel = CharacterDetailViewModel(character: character)
@@ -26,18 +27,11 @@ struct CharacterDetailView: View {
                             .resizable()
                             .aspectRatio(contentMode: .fit)
                             .frame(height: 200)
-                        Button("Share Image") {
-//                            guard let image = UIImage(data: characterDetailViewModel.character.imageData) else { return }
-                            let activityViewController = UIActivityViewController(activityItems: [image], applicationActivities: nil)
-                        
-                            if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene {
-                                if let window = windowScene.windows.first {
-                                    window.rootViewController?.present(activityViewController, animated: true, completion: nil)
-                                }
+                            .onAppear {
+                                sharedImage = convertToUIImage(image: image)
                             }
-                        }
-                        .padding()
-                   
+                            .padding()
+                        
                     default:
                         ProgressView()
                     }
@@ -58,19 +52,47 @@ struct CharacterDetailView: View {
             
             Spacer()
         }
-        .navigationBarTitle("Character Detail")
+        
         .navigationBarItems(trailing:
-                                Button(action: {
-            characterDetailViewModel.toggleFavorite()
-        }) {
-            if let isFavorite = characterDetailViewModel.character.isFavorite {
-                Image(systemName: isFavorite ? "star.fill" : "star")
-                    .foregroundColor(isFavorite ? .yellow : .gray)
-            } else {
-                Image(systemName: "star")
-                    .foregroundColor(.gray)
+                                HStack {
+            Button(action: {
+                characterDetailViewModel.toggleFavorite()
+            }) {
+                if let isFavorite = characterDetailViewModel.character.isFavorite {
+                    Image(systemName: isFavorite ? "star.fill" : "star")
+                        .foregroundColor(isFavorite ? .yellow : .gray)
+                } else {
+                    Image(systemName: "star")
+                        .foregroundColor(.gray)
+                }
+            }
+            
+            Button(action: shareImage) {
+                Image(systemName: "square.and.arrow.up")
+                    .padding()
             }
         }
         )
+    }
+    
+    func convertToUIImage(image: Image) -> UIImage? {
+        let controller = UIHostingController(rootView: image)
+        let view = controller.view
+        
+        let renderer = UIGraphicsImageRenderer(size: view!.bounds.size)
+        return renderer.image { _ in
+            view?.drawHierarchy(in: view!.bounds, afterScreenUpdates: true)
+        }
+    }
+    
+    func shareImage() {
+        guard let image = sharedImage else { return }
+        let activityViewController = UIActivityViewController(activityItems: [image], applicationActivities: nil)
+        
+        if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene {
+            if let window = windowScene.windows.first {
+                window.rootViewController?.present(activityViewController, animated: true, completion: nil)
+            }
+        }
     }
 }
