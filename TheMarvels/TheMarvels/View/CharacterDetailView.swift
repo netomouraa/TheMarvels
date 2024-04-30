@@ -57,7 +57,7 @@ struct CharacterDetailView: View {
         .navigationBarItems(trailing:
                                 HStack {
             Button(action: {
-                characterDetailViewModel.toggleFavorite()
+                charactersViewModel.toggleFavorite(character: characterDetailViewModel.character)
             }) {
                 if let isFavorite = characterDetailViewModel.character.isFavorite {
                     Image(systemName: isFavorite ? "star.fill" : "star")

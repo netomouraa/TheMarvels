@@ -10,7 +10,7 @@ import MarvelService
 
 struct CharacterRowView: View {
     @EnvironmentObject var viewModel: CharactersViewModel
-    @EnvironmentObject var characterDetailViewModel: CharacterDetailViewModel
+//    @EnvironmentObject var characterDetailViewModel: CharacterDetailViewModel
     let character: MarvelCharacter
     
     var body: some View {

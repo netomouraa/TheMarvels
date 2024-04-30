@@ -14,19 +14,19 @@ class CharacterDetailViewModel: ObservableObject {
     
     init(character: MarvelCharacter) {
         self.character = character
-        if let isFavorite = UserDefaults.standard.value(forKey: "favorite_\(character.id)") as? Bool {
-            self.character.isFavorite = isFavorite
-        }
+//        if let isFavorite = UserDefaults.standard.value(forKey: "favorite_\(character.id)") as? Bool {
+//            self.character.isFavorite = isFavorite
+//        }
     }
     
-    func toggleFavorite() {
-        if let currentIsFavorite = character.isFavorite {
-            character.isFavorite = !currentIsFavorite
-            UserDefaults.standard.set(!currentIsFavorite, forKey: "favorite_\(character.id)")
-        } else {
-            character.isFavorite = true
-            UserDefaults.standard.set(true, forKey: "favorite_\(character.id)")
-        }
-    }
+//    func toggleFavorite() {
+//        if let currentIsFavorite = character.isFavorite {
+//            character.isFavorite = !currentIsFavorite
+//            UserDefaults.standard.set(!currentIsFavorite, forKey: "favorite_\(character.id)")
+//        } else {
+//            character.isFavorite = true
+//            UserDefaults.standard.set(true, forKey: "favorite_\(character.id)")
+//        }
+//    }
 }
 
