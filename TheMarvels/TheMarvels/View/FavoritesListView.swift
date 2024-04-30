@@ -13,7 +13,7 @@ struct FavoritesListView: View {
 
     var body: some View {
         NavigationView {
-            List(viewModel.filteredFavoriteCharacters) { character in
+            List(viewModel.characters) { character in
                 NavigationLink(destination: CharacterDetailView(character: character)
                     .environmentObject(viewModel)) {
                         CharacterRowView(character: character)                    }

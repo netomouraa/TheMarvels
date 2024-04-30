@@ -16,28 +16,38 @@ class MarvelService {
     private let publicKey = "d05c8e9956339435c43e94a1f690108f"
     private let privateKey = "26d54e7f9ab1c783ee61de7d5c3f9d156b24f0c0"
     
-    func fetchCharacters(completion: @escaping ([Character]) -> Void) {
+    func fetchCharacters(completion: @escaping (Result<[Character], Error>) -> Void) {
         let ts = String(Date().timeIntervalSince1970)
         let hash = md5("\(ts)\(privateKey)\(publicKey)")
         
         let urlString = "https://gateway.marvel.com/v1/public/characters?ts=\(ts)&apikey=\(publicKey)&hash=\(hash)"
         
+        
         guard let url = URL(string: urlString) else {
-            print("Invalid URL")
+            completion(.failure(NSError(domain: "Invalid URL", code: 0, userInfo: nil)))
             return
         }
         
         URLSession.shared.dataTask(with: url) { data, response, error in
             guard let data = data else {
-                print("Error fetching characters: \(error?.localizedDescription ?? "Unknown error")")
+                if let error = error {
+                    completion(.failure(error))
+                } else {
+                    completion(.failure(NSError(domain: "Unknown error", code: 0, userInfo: nil)))
+                }
                 return
             }
             
             do {
                 let result = try JSONDecoder().decode(Response.self, from: data)
-                completion(result.data.results)
+                let characters = result.data.results
+                if characters.isEmpty {
+                    completion(.failure(NSError(domain: "Empty character list", code: 0, userInfo: nil)))
+                } else {
+                    completion(.success(characters))
+                }
             } catch {
-                print("Error decoding JSON: \(error)")
+                completion(.failure(error))
             }
         }.resume()
     }

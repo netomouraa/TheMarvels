@@ -25,11 +25,29 @@ struct ContentView: View {
                    .textFieldStyle(RoundedBorderTextFieldStyle())
                    .padding(.horizontal)
 
-            if showFavorites {
-                FavoritesListView(viewModel: viewModel)
-            } else {
-                CharactersListView(viewModel: viewModel)
+            switch viewModel.loadingState {
+            case .loading:
+                ProgressView()
+            case .loaded:
+                if showFavorites {
+                    if searchText.isEmpty {
+                        FavoritesListView(viewModel: viewModel)
+                    } else {
+                        FavoritesListView(viewModel: viewModel.filtered(by: searchText))
+                    }
+                } else {
+                    if searchText.isEmpty {
+                        FavoritesListView(viewModel: viewModel)
+                    } else {
+                        CharactersListView(viewModel: viewModel.filtered(by: searchText))
+                    }
+                }
+            case .empty:
+                Text("No characters found.")
+            case .error(let error):
+                Text("Error: \(error.localizedDescription)")
             }
+            
         }
         .onAppear {
             viewModel.fetchCharacters()
