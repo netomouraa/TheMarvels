@@ -11,6 +11,7 @@ struct ContentView: View {
     @StateObject var viewModel = CharactersViewModel()
     @State private var showFavorites = false
     @State private var searchText = ""
+    @State private var didAppear = false
 
     var body: some View {
         VStack {
@@ -21,10 +22,9 @@ struct ContentView: View {
             .pickerStyle(SegmentedPickerStyle())
             .padding()
 
-            TextField("Search", text: $searchText)
-                   .textFieldStyle(RoundedBorderTextFieldStyle())
-                   .padding(.horizontal)
-
+            SearchBar(text: $searchText, onSearch: {
+                CharactersListView(viewModel: viewModel.filtered(by: searchText))
+            })
             switch viewModel.loadingState {
             case .loading:
                 ProgressView()
@@ -43,22 +43,35 @@ struct ContentView: View {
                     }
                 }
             case .empty:
-                Text("No characters found.")
+                ErrorView(errorMessage: "No characters found.") {
+                    viewModel.fetchCharacters()
+                    searchText = ""
+                }
             case .error(let error):
-                Text("Error: \(error.localizedDescription)")
+                ErrorView(errorMessage: "Error: \(error.localizedDescription)") {
+                    viewModel.fetchCharacters()
+                    searchText = ""
+                }
             }
             
         }
-        .onAppear {
+        .refreshable {
             viewModel.fetchCharacters()
             searchText = ""
         }
+        .onAppear {
+            if !didAppear {
+                viewModel.fetchCharacters()
+                didAppear = true
+            }
+        }
+        .environmentObject(viewModel)
     }
 }
 
-struct ContentView_Previews: PreviewProvider {
-    static var previews: some View {
-        ContentView()
-    }
-}
+//struct ContentView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        ContentView()
+//    }
+//}
 
