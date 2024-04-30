@@ -12,7 +12,8 @@ import Foundation
 class CharactersViewModel: ObservableObject {
     @Published var characters: [Character] = []
     private let marvelService: MarvelService
-    
+    @Published var favoriteCharacters: [Character] = [] 
+
     init(marvelService: MarvelService = MarvelService()) {
         self.marvelService = marvelService
     }
