@@ -37,7 +37,7 @@ struct ContentView: View {
                     }
                 } else {
                     if searchText.isEmpty {
-                        FavoritesListView(viewModel: viewModel)
+                        CharactersListView(viewModel: viewModel)
                     } else {
                         CharactersListView(viewModel: viewModel.filtered(by: searchText))
                     }
