@@ -26,6 +26,18 @@ struct CharacterDetailView: View {
                             .resizable()
                             .aspectRatio(contentMode: .fit)
                             .frame(height: 200)
+                        Button("Share Image") {
+//                            guard let image = UIImage(data: characterDetailViewModel.character.imageData) else { return }
+                            let activityViewController = UIActivityViewController(activityItems: [image], applicationActivities: nil)
+                        
+                            if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene {
+                                if let window = windowScene.windows.first {
+                                    window.rootViewController?.present(activityViewController, animated: true, completion: nil)
+                                }
+                            }
+                        }
+                        .padding()
+                   
                     default:
                         ProgressView()
                     }
