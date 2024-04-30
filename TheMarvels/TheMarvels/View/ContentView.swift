@@ -23,7 +23,7 @@ struct ContentView: View {
             .padding()
 
             SearchBar(text: $searchText, onSearch: {
-                CharactersListView(viewModel: viewModel.filtered(by: searchText))
+                _ = CharactersListView(viewModel: viewModel.filtered(by: searchText))
             })
             switch viewModel.loadingState {
             case .loading:

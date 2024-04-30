@@ -14,7 +14,7 @@ struct CharactersListView: View {
 
     var body: some View {
         NavigationView {
-            List(viewModel.characters) { character in
+            List(viewModel.filteredCharacters) { character in
                 NavigationLink(destination: CharacterDetailView(character: character)
                     .environmentObject(viewModel)) {
                         CharacterRowView(character: character)
