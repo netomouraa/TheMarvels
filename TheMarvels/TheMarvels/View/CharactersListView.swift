@@ -7,6 +7,7 @@
 
 import Foundation
 import SwiftUI
+import MarvelService
 
 struct CharactersListView: View {
     @ObservedObject var viewModel: CharactersViewModel

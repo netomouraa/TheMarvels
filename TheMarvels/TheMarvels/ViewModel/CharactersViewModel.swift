@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import MarvelService
 
 enum CharactersLoadingState {
     case loading
@@ -15,9 +16,9 @@ enum CharactersLoadingState {
 }
 
 class CharactersViewModel: ObservableObject {
-    @Published var characters: [Character] = []
+    @Published var characters: [MarvelCharacter] = []
     private let marvelService: MarvelService
-    @Published var favoriteCharacters: [Character] = [] 
+    @Published var favoriteCharacters: [MarvelCharacter] = []
     @Published var searchText: String = ""
     @Published var loadingState: CharactersLoadingState = .loading
 
@@ -28,7 +29,7 @@ class CharactersViewModel: ObservableObject {
         return filteredViewModel
     }
 
-    var filteredCharacters: [Character] {
+    var filteredCharacters: [MarvelCharacter] {
         if searchText.isEmpty {
             return characters
         } else {
@@ -36,7 +37,7 @@ class CharactersViewModel: ObservableObject {
         }
     }
 
-    var filteredFavoriteCharacters: [Character] {
+    var filteredFavoriteCharacters: [MarvelCharacter] {
         if searchText.isEmpty {
             return favoriteCharacters
         } else {
@@ -70,7 +71,7 @@ class CharactersViewModel: ObservableObject {
         }
     }
 
-    func toggleFavorite(character: Character) {
+    func toggleFavorite(character: MarvelCharacter) {
          if let index = characters.firstIndex(where: { $0.id == character.id }) {
              characters[index].isFavorite?.toggle()
              UserDefaults.standard.set(characters[index].isFavorite, forKey: "favorite_\(character.id)")

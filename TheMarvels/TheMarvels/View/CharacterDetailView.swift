@@ -6,13 +6,14 @@
 //
 
 import SwiftUI
+import MarvelService
 
 struct CharacterDetailView: View {
     @EnvironmentObject var charactersViewModel: CharactersViewModel
     @ObservedObject var characterDetailViewModel: CharacterDetailViewModel
     @State private var sharedImage: UIImage?
     
-    init(character: Character) {
+    init(character: MarvelCharacter) {
         let characterDetailViewModel = CharacterDetailViewModel(character: character)
         _characterDetailViewModel = ObservedObject(initialValue: characterDetailViewModel)
     }

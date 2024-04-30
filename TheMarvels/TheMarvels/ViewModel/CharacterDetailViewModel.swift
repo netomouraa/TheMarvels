@@ -7,11 +7,12 @@
 
 import Foundation
 import SwiftUI
+import MarvelService
 
 class CharacterDetailViewModel: ObservableObject {
-    @Published var character: Character
+    @Published var character: MarvelCharacter
     
-    init(character: Character) {
+    init(character: MarvelCharacter) {
         self.character = character
         if let isFavorite = UserDefaults.standard.value(forKey: "favorite_\(character.id)") as? Bool {
             self.character.isFavorite = isFavorite
