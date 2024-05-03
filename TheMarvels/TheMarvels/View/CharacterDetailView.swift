@@ -11,7 +11,7 @@ import MarvelService
 struct CharacterDetailView: View {
     @EnvironmentObject var charactersViewModel: CharactersViewModel
     @ObservedObject var characterDetailViewModel: CharacterDetailViewModel
-    @State private var sharedImage: Image = Image("photo")
+    @State private var sharedImage: Image?
     
     init(character: MarvelCharacter) {
         let characterDetailViewModel = CharacterDetailViewModel(character: character)
@@ -62,14 +62,16 @@ struct CharacterDetailView: View {
                 Image(systemName: characterDetailViewModel.character.isFavorite ?? false ? "star.fill" : "star")
                     .foregroundColor(characterDetailViewModel.character.isFavorite ?? false ? .yellow : .gray)
             }
-            
-            ShareLink(
-                item: sharedImage,
-                preview: SharePreview(
-                    "\(characterDetailViewModel.character.name)",
-                    image: sharedImage
+            if let sharedImage {
+                ShareLink(
+                    item: sharedImage,
+                    preview: SharePreview(
+                        "\(characterDetailViewModel.character.name)",
+                        image: sharedImage
+                    )
                 )
-            )
+            }
+            
         }
         )
     }
