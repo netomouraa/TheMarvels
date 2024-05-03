@@ -22,9 +22,12 @@ class CharactersViewModel: ObservableObject {
     private let marvelService = MarvelService.shared
     private var cancellables: Set<AnyCancellable> = []
     @Published var identifiableError: IdentifiableError?
+    private let limit = 20
+    private var offset = 0
+    private var currentPage = 0
 
     func fetchCharacters(name: String? = nil) {
-        marvelService.fetchCharacters(name: name)
+        marvelService.fetchCharacters(name: name, limit: limit, offset: offset)
             .receive(on: DispatchQueue.main)
             .sink { completion in
                 switch completion {
@@ -34,12 +37,18 @@ class CharactersViewModel: ObservableObject {
                     break
                 }
             } receiveValue: { characters in
-                self.characters = characters
+                self.characters.append(contentsOf: characters)
+                self.offset += self.limit
                 self.identifiableError = nil
             }
             .store(in: &cancellables)
     }
    
+    func shouldLoadNextPage(character: MarvelCharacter) -> Bool {
+         guard let lastCharacter = characters.last else { return false }
+         return character.id == lastCharacter.id
+     }
+    
     func toggleFavoriteStatus(for character: MarvelCharacter) {
         guard let index = characters.firstIndex(where: { $0.id == character.id }) else { return }
         characters[index].isFavorite = !(characters[index].isFavorite ?? false)

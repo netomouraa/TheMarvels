@@ -32,22 +32,15 @@ struct ContentView: View {
                 CharactersListView(viewModel: viewModel)
             }
         }
-        .refreshable {
-            self.resetView()
-        }
         .onAppear {
-            self.resetView()
+            viewModel.fetchCharacters()
+            searchText = ""
         }
         .alert(item: $viewModel.identifiableError) { identifiableError in
             Alert(title: Text("Error"), message: Text(identifiableError.error.localizedDescription), dismissButton: .default(Text("OK")))
         }
         
         .environmentObject(viewModel)
-    }
-    
-    func resetView(){
-        viewModel.fetchCharacters()
-        searchText = ""
     }
 }
 
