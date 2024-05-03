@@ -11,61 +11,43 @@ struct ContentView: View {
     @StateObject var viewModel = CharactersViewModel()
     @State private var showFavorites = false
     @State private var searchText = ""
-    @State private var didAppear = false
-
+    
     var body: some View {
         VStack {
+            SearchBar(text: $searchText, onSearch: {
+                viewModel.fetchCharacters(name: searchText)
+            })
+            .padding()
+            
             Picker(selection: $showFavorites, label: Text("Favorites")) {
                 Text("All").tag(false)
                 Text("Favorites").tag(true)
             }
             .pickerStyle(SegmentedPickerStyle())
             .padding()
-
-            SearchBar(text: $searchText, onSearch: {
-                _ = CharactersListView(viewModel: viewModel.filtered(by: searchText))
-            })
-            switch viewModel.loadingState {
-            case .loading:
-                ProgressView()
-            case .loaded:
-                if showFavorites {
-                    if searchText.isEmpty {
-                        FavoritesListView(viewModel: viewModel)
-                    } else {
-                        FavoritesListView(viewModel: viewModel.filtered(by: searchText))
-                    }
-                } else {
-                    if searchText.isEmpty {
-                        CharactersListView(viewModel: viewModel)
-                    } else {
-                        CharactersListView(viewModel: viewModel.filtered(by: searchText))
-                    }
-                }
-            case .empty:
-                ErrorView(errorMessage: "No characters found.") {
-                    viewModel.fetchCharacters()
-                    searchText = ""
-                }
-            case .error(let error):
-                ErrorView(errorMessage: "Error: \(error.localizedDescription)") {
-                    viewModel.fetchCharacters()
-                    searchText = ""
-                }
-            }
             
+            if showFavorites {
+                CharactersListView(viewModel: viewModel)
+            } else {
+                CharactersListView(viewModel: viewModel)
+            }
         }
         .refreshable {
-            viewModel.fetchCharacters()
-            searchText = ""
+            self.resetView()
         }
         .onAppear {
-            if !didAppear {
-                viewModel.fetchCharacters()
-                didAppear = true
-            }
+            self.resetView()
         }
+        .alert(item: $viewModel.identifiableError) { identifiableError in
+            Alert(title: Text("Error"), message: Text(identifiableError.error.localizedDescription), dismissButton: .default(Text("OK")))
+        }
+        
         .environmentObject(viewModel)
+    }
+    
+    func resetView(){
+        viewModel.fetchCharacters()
+        searchText = ""
     }
 }
 

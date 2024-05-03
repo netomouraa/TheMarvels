@@ -13,7 +13,7 @@ struct SearchBar: View {
     
     var body: some View {
         HStack {
-            TextField("Pesquisar personagens", text: $text, onCommit: {
+            TextField("Search by name", text: $text, onCommit: {
                 if !text.isEmpty {
                     onSearch()
                 }
@@ -40,7 +40,7 @@ struct SearchBar: View {
                     hideKeyboard()
                 }
             }) {
-                Text("Pesquisar")
+                Text("Search")
             }
             .padding(.trailing)
         }
