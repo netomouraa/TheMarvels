@@ -11,7 +11,7 @@ import MarvelService
 struct CharacterDetailView: View {
     @EnvironmentObject var charactersViewModel: CharactersViewModel
     @ObservedObject var characterDetailViewModel: CharacterDetailViewModel
-    @State private var sharedImage: UIImage?
+    @State private var sharedImage: Image = Image("photo")
     
     init(character: MarvelCharacter) {
         let characterDetailViewModel = CharacterDetailViewModel(character: character)
@@ -29,7 +29,7 @@ struct CharacterDetailView: View {
                             .aspectRatio(contentMode: .fit)
                             .frame(height: 200)
                             .onAppear {
-                                sharedImage = convertToUIImage(image: image)
+                                sharedImage = image
                             }
                             .padding()
                         
@@ -63,32 +63,14 @@ struct CharacterDetailView: View {
                     .foregroundColor(characterDetailViewModel.character.isFavorite ?? false ? .yellow : .gray)
             }
             
-            Button(action: shareImage) {
-                Image(systemName: "square.and.arrow.up")
-                    .padding()
-            }
+            ShareLink(
+                item: sharedImage,
+                preview: SharePreview(
+                    "\(characterDetailViewModel.character.name)",
+                    image: sharedImage
+                )
+            )
         }
         )
-    }
-    
-    func convertToUIImage(image: Image) -> UIImage? {
-        let controller = UIHostingController(rootView: image)
-        let view = controller.view
-        
-        let renderer = UIGraphicsImageRenderer(size: view!.bounds.size)
-        return renderer.image { _ in
-            view?.drawHierarchy(in: view!.bounds, afterScreenUpdates: true)
-        }
-    }
-    
-    func shareImage() {
-        guard let image = sharedImage else { return }
-        let activityViewController = UIActivityViewController(activityItems: [image], applicationActivities: nil)
-        
-        if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene {
-            if let window = windowScene.windows.first {
-                window.rootViewController?.present(activityViewController, animated: true, completion: nil)
-            }
-        }
     }
 }
