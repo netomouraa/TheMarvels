@@ -9,36 +9,20 @@ import Foundation
 import MarvelService
 import Combine
 
+struct IdentifiableError: Identifiable {
+    let id = UUID()
+    let error: Error
+}
+
 class CharactersViewModel: ObservableObject {
     @Published var characters: [MarvelCharacter] = []
-    @Published var identifiableError: IdentifiableError?
+    private let favoritesKey = "FavoriteCharacters"
+    private var favoriteCharacterIDs: Set<Int> = []
 
     private let marvelService = MarvelService.shared
     private var cancellables: Set<AnyCancellable> = []
+    @Published var identifiableError: IdentifiableError?
 
-//    func filtered(by searchText: String) -> CharactersViewModel {
-//        let filteredViewModel = CharactersViewModel()
-//        filteredViewModel.characters = self.characters.filter { $0.name.lowercased().contains(searchText.lowercased()) }
-//        filteredViewModel.favoriteCharacters = self.favoriteCharacters.filter { $0.name.lowercased().contains(searchText.lowercased()) }
-//        return filteredViewModel
-//    }
-//
-//    var filteredCharacters: [MarvelCharacter] {
-//        if searchText.isEmpty {
-//            return characters
-//        } else {
-//            return characters.filter { $0.name.lowercased().contains(searchText.lowercased()) }
-//        }
-//    }
-//
-//    var filteredFavoriteCharacters: [MarvelCharacter] {
-//        if searchText.isEmpty {
-//            return favoriteCharacters
-//        } else {
-//            return favoriteCharacters.filter { $0.name.lowercased().contains(searchText.lowercased()) }
-//        }
-//    }
-    
     func fetchCharacters(name: String? = nil) {
         marvelService.fetchCharacters(name: name)
             .receive(on: DispatchQueue.main)
@@ -56,15 +40,24 @@ class CharactersViewModel: ObservableObject {
             .store(in: &cancellables)
     }
    
-    func toggleFavorite(character: MarvelCharacter) {
-         if let index = characters.firstIndex(where: { $0.id == character.id }) {
-             characters[index].isFavorite?.toggle()
-             UserDefaults.standard.set(characters[index].isFavorite, forKey: "favorite_\(character.id)")
-         }
-     }
-}
-
-struct IdentifiableError: Identifiable {
-    let id = UUID()
-    let error: Error
+    func toggleFavoriteStatus(for character: MarvelCharacter) {
+        guard let index = characters.firstIndex(where: { $0.id == character.id }) else { return }
+        characters[index].isFavorite = !(characters[index].isFavorite ?? false)
+        saveFavoriteCharacterIDs()
+    }
+        
+    func favoriteCharacters() -> [MarvelCharacter] {
+        return characters.filter { $0.isFavorite ?? false }
+    }
+    
+    private func loadFavoriteCharacterIDs() {
+        if let savedFavoriteCharacterIDs = UserDefaults.standard.array(forKey: favoritesKey) as? [Int] {
+            favoriteCharacterIDs = Set(savedFavoriteCharacterIDs)
+        }
+    }
+    
+    private func saveFavoriteCharacterIDs() {
+        let characterIDs = characters.filter { $0.isFavorite ?? false }.map { $0.id }
+        UserDefaults.standard.set(Array(characterIDs), forKey: favoritesKey)
+    }
 }

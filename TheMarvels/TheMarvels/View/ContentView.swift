@@ -27,7 +27,7 @@ struct ContentView: View {
             .padding()
             
             if showFavorites {
-                CharactersListView(viewModel: viewModel)
+                FavoritesListView(viewModel: viewModel)
             } else {
                 CharactersListView(viewModel: viewModel)
             }

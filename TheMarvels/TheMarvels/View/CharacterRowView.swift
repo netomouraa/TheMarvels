@@ -49,15 +49,10 @@ struct CharacterRowView: View {
             Spacer()
             
             Button(action: {
-                viewModel.toggleFavorite(character: character)
+                viewModel.toggleFavoriteStatus(for: character)
             }) {
-                if let isFavorite = character.isFavorite {
-                    Image(systemName: isFavorite ? "star.fill" : "star")
-                        .foregroundColor(isFavorite ? .yellow : .gray)
-                } else {
-                    Image(systemName: "star")
-                        .foregroundColor(.gray)
-                }
+                Image(systemName: character.isFavorite ?? false ? "star.fill" : "star")
+                    .foregroundColor(character.isFavorite ?? false ? .yellow : .gray)
             }
             .padding(.trailing)
         }

@@ -57,15 +57,10 @@ struct CharacterDetailView: View {
         .navigationBarItems(trailing:
                                 HStack {
             Button(action: {
-                charactersViewModel.toggleFavorite(character: characterDetailViewModel.character)
+                charactersViewModel.toggleFavoriteStatus(for: characterDetailViewModel.character)
             }) {
-                if let isFavorite = characterDetailViewModel.character.isFavorite {
-                    Image(systemName: isFavorite ? "star.fill" : "star")
-                        .foregroundColor(isFavorite ? .yellow : .gray)
-                } else {
-                    Image(systemName: "star")
-                        .foregroundColor(.gray)
-                }
+                Image(systemName: characterDetailViewModel.character.isFavorite ?? false ? "star.fill" : "star")
+                    .foregroundColor(characterDetailViewModel.character.isFavorite ?? false ? .yellow : .gray)
             }
             
             Button(action: shareImage) {
