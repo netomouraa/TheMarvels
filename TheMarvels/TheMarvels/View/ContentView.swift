@@ -9,8 +9,8 @@ import SwiftUI
 
 struct ContentView: View {
     @StateObject var viewModel = CharactersViewModel()
-    @State private var showFavorites = false
-    @State private var searchText = ""
+    @State var showFavorites = false
+    @State var searchText = ""
     
     var body: some View {
         VStack {
