@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		6984F26568B4DB7ABC58105D /* Pods_TheMarvelsTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 696A4D14422CE1330E1E2FBC /* Pods_TheMarvelsTests.framework */; };
 		7403A4CC308E8296C2E4DFC6 /* Pods_TheMarvels.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1F264579D9C43624FDA0A77F /* Pods_TheMarvels.framework */; };
-		979692572BE17A690006976B /* ErrorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 979692562BE17A690006976B /* ErrorView.swift */; };
 		979692592BE17A840006976B /* SearchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 979692582BE17A840006976B /* SearchBar.swift */; };
 		9796925B2BE17EE80006976B /* CharactersViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9796925A2BE17EE80006976B /* CharactersViewModelTests.swift */; };
 		9796925D2BE180A80006976B /* CharacterDetailViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9796925C2BE180A80006976B /* CharacterDetailViewModelTests.swift */; };
@@ -61,7 +60,6 @@
 		696A4D14422CE1330E1E2FBC /* Pods_TheMarvelsTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_TheMarvelsTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		780EA06808E7F7906A6306D6 /* Pods-TheMarvels.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TheMarvels.debug.xcconfig"; path = "Target Support Files/Pods-TheMarvels/Pods-TheMarvels.debug.xcconfig"; sourceTree = "<group>"; };
 		95F1BC5BBDCA2D6CEDB61222 /* Pods-TheMarvelsTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TheMarvelsTests.debug.xcconfig"; path = "Target Support Files/Pods-TheMarvelsTests/Pods-TheMarvelsTests.debug.xcconfig"; sourceTree = "<group>"; };
-		979692562BE17A690006976B /* ErrorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorView.swift; sourceTree = "<group>"; };
 		979692582BE17A840006976B /* SearchBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchBar.swift; sourceTree = "<group>"; };
 		9796925A2BE17EE80006976B /* CharactersViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharactersViewModelTests.swift; sourceTree = "<group>"; };
 		9796925C2BE180A80006976B /* CharacterDetailViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharacterDetailViewModelTests.swift; sourceTree = "<group>"; };
@@ -240,7 +238,6 @@
 				97AE5F912BE0D094004FC9BF /* FavoritesListView.swift */,
 				97AE5F762BE09875004FC9BF /* CharacterRowView.swift */,
 				97AE5F782BE0987C004FC9BF /* CharacterDetailView.swift */,
-				979692562BE17A690006976B /* ErrorView.swift */,
 				979692582BE17A840006976B /* SearchBar.swift */,
 			);
 			path = View;
@@ -498,7 +495,6 @@
 				97AE5F492BE07D27004FC9BF /* TheMarvelsApp.swift in Sources */,
 				97AE5F862BE0A4A8004FC9BF /* ContentView.swift in Sources */,
 				97AE5F792BE0987C004FC9BF /* CharacterDetailView.swift in Sources */,
-				979692572BE17A690006976B /* ErrorView.swift in Sources */,
 				97AE5F902BE0CFD3004FC9BF /* CharactersListView.swift in Sources */,
 				97AE5F922BE0D094004FC9BF /* FavoritesListView.swift in Sources */,
 				97AE5F8C2BE0BF0B004FC9BF /* CharacterDetailViewModel.swift in Sources */,
