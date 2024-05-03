@@ -7,74 +7,64 @@
 
 import Foundation
 import MarvelService
-
-enum CharactersLoadingState {
-    case loading
-    case loaded
-    case empty
-    case error(Error)
-}
+import Combine
 
 class CharactersViewModel: ObservableObject {
     @Published var characters: [MarvelCharacter] = []
-    private let marvelService: MarvelService
-    @Published var favoriteCharacters: [MarvelCharacter] = []
-    @Published var searchText: String = ""
-    @Published var loadingState: CharactersLoadingState = .loading
+    @Published var identifiableError: IdentifiableError?
 
-    func filtered(by searchText: String) -> CharactersViewModel {
-        let filteredViewModel = CharactersViewModel()
-        filteredViewModel.characters = self.characters.filter { $0.name.lowercased().contains(searchText.lowercased()) }
-        filteredViewModel.favoriteCharacters = self.favoriteCharacters.filter { $0.name.lowercased().contains(searchText.lowercased()) }
-        return filteredViewModel
-    }
+    private let marvelService = MarvelService.shared
+    private var cancellables: Set<AnyCancellable> = []
 
-    var filteredCharacters: [MarvelCharacter] {
-        if searchText.isEmpty {
-            return characters
-        } else {
-            return characters.filter { $0.name.lowercased().contains(searchText.lowercased()) }
-        }
-    }
-
-    var filteredFavoriteCharacters: [MarvelCharacter] {
-        if searchText.isEmpty {
-            return favoriteCharacters
-        } else {
-            return favoriteCharacters.filter { $0.name.lowercased().contains(searchText.lowercased()) }
-        }
-    }
+//    func filtered(by searchText: String) -> CharactersViewModel {
+//        let filteredViewModel = CharactersViewModel()
+//        filteredViewModel.characters = self.characters.filter { $0.name.lowercased().contains(searchText.lowercased()) }
+//        filteredViewModel.favoriteCharacters = self.favoriteCharacters.filter { $0.name.lowercased().contains(searchText.lowercased()) }
+//        return filteredViewModel
+//    }
+//
+//    var filteredCharacters: [MarvelCharacter] {
+//        if searchText.isEmpty {
+//            return characters
+//        } else {
+//            return characters.filter { $0.name.lowercased().contains(searchText.lowercased()) }
+//        }
+//    }
+//
+//    var filteredFavoriteCharacters: [MarvelCharacter] {
+//        if searchText.isEmpty {
+//            return favoriteCharacters
+//        } else {
+//            return favoriteCharacters.filter { $0.name.lowercased().contains(searchText.lowercased()) }
+//        }
+//    }
     
-    init(marvelService: MarvelService = MarvelService()) {
-        self.marvelService = marvelService
-    }
-    
-    func fetchCharacters() {
-        loadingState = .loading
-        MarvelService.shared.fetchCharacters { result in
-            DispatchQueue.main.async {
-                switch result {
-                case .success(let characters):
-                    self.characters = characters
-                    self.loadingState = characters.isEmpty ? .empty : .loaded
+    func fetchCharacters(name: String? = nil) {
+        marvelService.fetchCharacters(name: name)
+            .receive(on: DispatchQueue.main)
+            .sink { completion in
+                switch completion {
                 case .failure(let error):
-                    switch error {
-                    case let nsError as NSError where nsError.domain == NSURLErrorDomain && nsError.code == NSURLErrorNotConnectedToInternet:
-                        self.loadingState = .error(NSError(domain: "No Internet Connection", code: 0, userInfo: nil))
-                    case let nsError as NSError where nsError.domain == "Empty character list":
-                        self.loadingState = .empty
-                    default:
-                        self.loadingState = .error(error)
-                    }
+                    self.identifiableError = IdentifiableError(error: error)
+                case .finished:
+                    break
                 }
+            } receiveValue: { characters in
+                self.characters = characters
+                self.identifiableError = nil
             }
-        }
+            .store(in: &cancellables)
     }
-
+   
     func toggleFavorite(character: MarvelCharacter) {
          if let index = characters.firstIndex(where: { $0.id == character.id }) {
              characters[index].isFavorite?.toggle()
              UserDefaults.standard.set(characters[index].isFavorite, forKey: "favorite_\(character.id)")
          }
      }
+}
+
+struct IdentifiableError: Identifiable {
+    let id = UUID()
+    let error: Error
 }
